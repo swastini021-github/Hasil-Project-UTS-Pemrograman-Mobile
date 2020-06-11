@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 //untuk http package
 import 'package:http/http.dart' as http;
-import './home.dart';
+import './listpenjualan.dart';
 //import 'package:crud_api/main.dart';
 import 'dart:async';
 
@@ -57,7 +57,7 @@ class MyCustomFormState extends State<MyCustomForm> {
   Future<http.Response> adddata(index) async {
     if (index == null) {
       final http.Response response = await http
-          .post("http://192.168.43.27/apiflutter/penjualan/save", body: {
+          .post("http://192.168.43.28/apiflutter/penjualan/save", body: {
         'nama': nameController.text,
         'keterangan': keteranganController.text,
         'jumlah': jumlahController.text,
@@ -66,7 +66,7 @@ class MyCustomFormState extends State<MyCustomForm> {
       return response;
     } else {
       final http.Response response = await http
-          .post("http://192.168.43.27/apiflutter/penjualan/save_update", body: {
+          .post("http://192.168.43.28/apiflutter/penjualan/save_update", body: {
         'id': widget.list['id'],
         'nama': nameController.text,
         'keterangan': keteranganController.text,
@@ -214,7 +214,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => new Home()));
+                                builder: (context) => new ListPenjualan()));
                       }
                     },
                   ),
@@ -233,8 +233,10 @@ class MyCustomFormState extends State<MyCustomForm> {
                     ),
                     onPressed: () {
                       //batal, kembali ke halaman Main dart
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => new Home()));
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => new ListPenjualan()));
                     },
                   ),
                 )

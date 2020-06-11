@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:crud_api/ui/berandauser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
@@ -17,9 +18,9 @@ class _LoginState extends State<Login> {
   TextEditingController usr = new TextEditingController();
   TextEditingController psw = new TextEditingController();
   String msg = "";
-  Future<String> _login() async {
+  Future<List> _login() async {
     final response = await http
-        .post("http://192.168.43.27/apiflutter/Login/login_api", body: {
+        .post("http://192.168.43.28/apiflutter/Login/login_api", body: {
       "username": usr.text,
       "password": psw.text,
     });
@@ -35,12 +36,14 @@ class _LoginState extends State<Login> {
       String photo = datauser["photo"];
       int level = int.parse(datauser["level"]);
       setState(() {
-        SavePref(emailAPI, namaAPI, id, level, photo);
+        savePref(emailAPI, namaAPI, id, level, photo);
       });
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (BuildContext context) => Berandauser()));
     }
   }
 
-  SavePref(
+  savePref(
       String email, String nama, String id, int level, String photo) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
@@ -62,19 +65,19 @@ class _LoginState extends State<Login> {
                 image: AssetImage("assets/appimages/bglogin.jpg"),
                 fit: BoxFit.cover)),
         child: ListView(children: <Widget>[
-          Padding(padding: EdgeInsets.only(top: 30)),
-          Image.asset("assets/appimages/login.png", width: 100),
+          Padding(padding: EdgeInsets.only(top: 5)),
+          Image.asset("assets/appimages/login.png", width: 30),
           Container(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(8),
             child: TextField(
                 controller: usr,
                 decoration: InputDecoration(
+                  fillColor: (Colors.white),
                   hintText: "Username",
                   labelText: "Username",
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10)),
                 )),
-            color: Colors.white,
           ),
           Container(
             padding: EdgeInsets.all(10),
@@ -82,12 +85,12 @@ class _LoginState extends State<Login> {
                 obscureText: true,
                 controller: psw,
                 decoration: InputDecoration(
+                  fillColor: (Colors.white),
                   hintText: "Password",
                   labelText: "Password",
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10)),
                 )),
-            color: Colors.white,
           ),
           RaisedButton(
             child: Row(
@@ -97,7 +100,10 @@ class _LoginState extends State<Login> {
               _login();
             },
           ),
-          Text(msg)
+          Text(
+            msg,
+            style: TextStyle(fontSize: 20.0, color: Colors.red),
+          )
         ]),
       ),
     );
