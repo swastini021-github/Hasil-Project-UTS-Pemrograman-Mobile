@@ -1,28 +1,25 @@
+import 'package:crud_api/ui/berandaadmin.dart';
 import 'package:flutter/material.dart';
-//untuk datepicker
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-//untuk http package
 import 'package:http/http.dart' as http;
 import './listpenjualan.dart';
-//import 'package:crud_api/main.dart';
 import 'dart:async';
 
-class InputPenjualan extends StatelessWidget {
+class InputUsers extends StatelessWidget {
   final list;
   final index;
   //class constructor
-  InputPenjualan({this.list, this.index});
+  InputUsers({this.list, this.index});
   @override
   Widget build(BuildContext context) {
     //membuat material app
     return MaterialApp(
       //menampilkan judul transaksi baru jika index null
-      title: index == null ? "Transaksi Baru" : "Update Transaksi",
+      title: index == null ? "User Baru" : "Update User",
       home: Scaffold(
         appBar: AppBar(
-          title:
-              index == null ? Text("Transaksi Baru") : Text("Update Transaksi"),
+          title: index == null ? Text("User Baru") : Text("Update User"),
         ),
         //membuat body dalamsebuah class dengan parameter list dan index
         body: MyCustomForm(
@@ -45,34 +42,35 @@ class MyCustomForm extends StatefulWidget {
 }
 
 class MyCustomFormState extends State<MyCustomForm> {
-  //membuat variabel untuk menampung validasi
   final _formKey = GlobalKey<FormState>();
   //membaca inputan dari textfield
   TextEditingController nameController = TextEditingController();
-  TextEditingController jumlahController = TextEditingController();
-  TextEditingController tanggalController = TextEditingController();
-  TextEditingController keteranganController = TextEditingController();
-  //format datepicker
-  final format = DateFormat('yyyy-MM-dd');
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController photoController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   Future<http.Response> adddata(index) async {
     if (index == null) {
       final http.Response response = await http
-          .post("http://192.168.43.27/apiflutter/penjualan/save", body: {
+          .post("http://192.168.43.27/apiflutter/admin/save_users", body: {
         'nama': nameController.text,
-        'keterangan': keteranganController.text,
-        'jumlah': jumlahController.text,
-        'tanggal': tanggalController.text,
+        'emali': emailController.text,
+        'username': usernameController.text,
+        'password': passwordController.text,
+        'password': photoController.text,
       });
       return response;
     } else {
-      final http.Response response = await http
-          .post("http://192.168.43.27/apiflutter/penjualan/save_update", body: {
-        'id': widget.list['id'],
-        'nama': nameController.text,
-        'keterangan': keteranganController.text,
-        'jumlah': jumlahController.text,
-        'tanggal': tanggalController.text,
-      });
+      final http.Response response = await http.post(
+          "http://192.168.43.27/apiflutter/admin/save_update_users",
+          body: {
+            'id': widget.list['id'],
+            'nama': nameController.text,
+            'email': emailController.text,
+            'username': usernameController.text,
+            'password': passwordController.text,
+            'password': photoController.text,
+          });
       return response;
     }
   }
@@ -81,22 +79,30 @@ class MyCustomFormState extends State<MyCustomForm> {
   void initState() {
     if (widget.index == null) {
       nameController = TextEditingController();
-      jumlahController = TextEditingController();
-      tanggalController = TextEditingController();
-      keteranganController = TextEditingController();
+      usernameController = TextEditingController();
+      passwordController = TextEditingController();
+      emailController = TextEditingController();
+      photoController = TextEditingController();
     } else {
       //jika index tidak null
       nameController = TextEditingController(text: widget.list['nama']);
-      jumlahController = TextEditingController(text: widget.list['jumlah']);
-      tanggalController = TextEditingController(text: widget.list['tanggal']);
-      keteranganController =
-          TextEditingController(text: widget.list['keterangan']);
+      usernameController = TextEditingController(text: widget.list['username']);
+      passwordController = TextEditingController(text: widget.list['password']);
+      photoController = TextEditingController(text: widget.list['photo']);
+      emailController = TextEditingController(text: widget.list['email']);
     }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    bool _secureText = true;
+    showHide() {
+      setState(() {
+        _secureText = !_secureText;
+      });
+    }
+
     //membuat form sesuai _formkey
     return Form(
       key: _formKey,
@@ -113,83 +119,74 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
                 controller: nameController,
                 decoration: InputDecoration(
-                  hintText: "nama",
-                  labelText: "Nama Barang",
+                  labelText: "Nama Lengkap",
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(3.0)),
                 )),
           ),
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(8.0),
             child: TextFormField(
-              controller: jumlahController,
-              //textfield type number
-              keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Mohon isi dengan Email';
+                  }
+                  return null;
+                },
+                controller: emailController,
+                decoration: InputDecoration(
+                  labelText: "Email",
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(3.0)),
+                )),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextFormField(
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Mohon masukan username';
+                  }
+                  return null;
+                },
+                controller: usernameController,
+                decoration: InputDecoration(
+                  labelText: "Username",
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(3.0)),
+                )),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextFormField(
+              controller: passwordController,
+              obscureText: _secureText,
               decoration: InputDecoration(
-                hintText: "jumlah",
-                labelText: "Harga Barang",
+                labelText: "Password",
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(3.0)),
+                suffixIcon: IconButton(
+                    icon: Icon(
+                        _secureText ? Icons.visibility_off : Icons.visibility),
+                    onPressed: showHide),
               ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Mohon Isi dengan angka';
-                }
-                return null;
-              },
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(8.0),
             child: TextFormField(
-              controller: keteranganController,
-              //textfield type number
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                hintText: "keterangan",
-                labelText: "Email",
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(3.0)),
-              ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Mohon Isi dengan email';
-                }
-                return null;
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              children: <Widget>[
-                //widget DateTimeField terdapat pada package datetime_picker_formfield
-                DateTimeField(
-                  controller: tanggalController,
-                  format: format,
-                  onShowPicker: (context, currentValue) {
-                    return showDatePicker(
-                        //setting datepicker
-                        context: context,
-                        firstDate: DateTime(2020),
-                        initialDate: currentValue ?? DateTime.now(),
-                        lastDate: DateTime(2045));
-                  },
-                  decoration: InputDecoration(
-                    hintText: "tanggal",
-                    labelText: "Tanggal",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(3.0)),
-                  ),
-                  validator: (DateTime dateTime) {
-                    if (dateTime == null) {
-                      return "Mohon diisi tanggal";
-                    }
-                    return null;
-                  },
-                )
-              ],
-            ),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Masukan Nama File';
+                  }
+                  return null;
+                },
+                controller: usernameController,
+                decoration: InputDecoration(
+                  labelText: "Nama File(Photo)",
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(3.0)),
+                )),
           ),
           Padding(
             padding: EdgeInsets.all(10.0),
@@ -209,7 +206,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => new ListPenjualan()));
+                                builder: (context) => new Berandaadmin()));
                       }
                     },
                   ),
@@ -231,7 +228,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => new ListPenjualan()));
+                              builder: (context) => new Berandaadmin()));
                     },
                   ),
                 )

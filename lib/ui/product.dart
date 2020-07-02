@@ -1,31 +1,31 @@
 import 'dart:convert';
-import 'package:crud_api/ui/inputusers.dart';
-import 'package:crud_api/ui/tampil_user.dart';
+import 'package:crud_api/ui/tambah_produk.dart';
 import 'package:flutter/material.dart';
+import './detail_produk.dart';
 import 'package:crud_api/modal/api.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
-class Berandaadmin extends StatefulWidget {
+class DaftarProduk extends StatefulWidget {
   @override
-  _ListUsersState createState() => _ListUsersState();
+  _ListProdukState createState() => _ListProdukState();
 }
 
-class _ListUsersState extends State<Berandaadmin> {
-  List usersList;
+class _ListProdukState extends State<DaftarProduk> {
+  List produkList;
   int count = 0;
   Future<List> getData() async {
-    final response = await http.get(BaseUrl.tampilUsers);
+    final response = await http.get(BaseUrl.tampilProduk);
     return json.decode(response.body);
   }
 
   @override
   void initState() {
-    Future<List> usersListFuture = getData();
-    usersListFuture.then((usersList) {
+    Future<List> produkListFuture = getData();
+    produkListFuture.then((produkList) {
       setState(() {
-        this.usersList = usersList;
-        this.count = usersList.length;
+        this.produkList = produkList;
+        this.count = produkList.length;
       });
     });
     super.initState();
@@ -35,14 +35,14 @@ class _ListUsersState extends State<Berandaadmin> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        title: Text("Daftar Users"),
+        title: Text("List Produk"),
       ),
       body: createListView(),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           tooltip: 'Input Barang',
           onPressed: () => Navigator.of(context).push(new MaterialPageRoute(
-              builder: (BuildContext context) => new InputUsers(
+              builder: (BuildContext context) => new TambahProduk(
                     list: null,
                     index: null,
                   )))),
@@ -50,7 +50,7 @@ class _ListUsersState extends State<Berandaadmin> {
   }
 
   ListView createListView() {
-    //TextStyle textStyle = Theme.of(context).textTheme.subhead;
+    TextStyle textStyle = Theme.of(context).textTheme.subhead;
     return ListView.builder(
       itemCount: count,
       itemBuilder: (BuildContext context, int index) {
@@ -60,14 +60,12 @@ class _ListUsersState extends State<Berandaadmin> {
             child: ListTile(
               onTap: () {
                 Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (BuildContext context) => TampilDetail(
-                    name: usersList[index]['nama'],
-                    email: usersList[index]['email'],
-                    username: usersList[index]['username'],
-                    level: usersList[index]['level'],
-                    status: usersList[index]['status'],
-                    cratedDate: usersList[index]['createdDate'],
-                    image: usersList[index]['photo'],
+                  builder: (BuildContext context) => DetailProduk(
+                    name: produkList[index]['nama_produk'],
+                    description: produkList[index]['deskripsi'],
+                    price: produkList[index]['harga'],
+                    image: produkList[index]['image'],
+                    star: 4,
                   ),
                 ));
               },
@@ -75,9 +73,8 @@ class _ListUsersState extends State<Berandaadmin> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     Image.asset(
-                      "assets/appimages/" + usersList[index]['photo'],
+                      "assets/appimages/" + produkList[index]['image'],
                       width: 150,
-                      height: 100,
                     ),
                     Expanded(
                         child: Container(
@@ -85,11 +82,35 @@ class _ListUsersState extends State<Berandaadmin> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          Text(this.usersList[index]['nama'],
+                          Text(this.produkList[index]['nama_produk'],
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               )),
-                          Text(this.usersList[index]['email']),
+                          Text(this.produkList[index]['deskripsi']),
+                          Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.star,
+                                size: 10,
+                                color: Colors.deepOrange,
+                              ),
+                              Icon(
+                                Icons.star,
+                                size: 10,
+                                color: Colors.deepOrange,
+                              ),
+                              Icon(
+                                Icons.star,
+                                size: 10,
+                                color: Colors.deepOrange,
+                              ),
+                              Icon(Icons.star, size: 10, color: Colors.orange),
+                              Text(
+                                " | Rp. " + produkList[index]['harga'],
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
                           Row(
                             children: <Widget>[
                               new GestureDetector(
@@ -97,14 +118,15 @@ class _ListUsersState extends State<Berandaadmin> {
                                   onTap: () => Navigator.of(context)
                                       .pushReplacement(new MaterialPageRoute(
                                           builder: (BuildContext context) =>
-                                              new InputUsers(
-                                                list: usersList[index],
+                                              new TambahProduk(
+                                                list: produkList[index],
                                                 index: index,
                                               )))),
                               new GestureDetector(
                                 child: Icon(Icons.delete),
-                                onTap: () => confirm(usersList[index]['id'],
-                                    usersList[index]['nama']),
+                                onTap: () => confirm(
+                                    produkList[index]['id_produk'],
+                                    produkList[index]['nama_produk']),
                               )
                             ],
                           )
@@ -117,9 +139,9 @@ class _ListUsersState extends State<Berandaadmin> {
     );
   }
 
-  Future<http.Response> deleteUsers(id) async {
+  Future<http.Response> deleteProduk(id) async {
     final http.Response response = await http
-        .delete('http://192.168.43.27/apiflutter/admin/delete_users/$id');
+        .delete('http://192.168.43.27/apiflutter/admin/delete_produk/$id');
     return response;
   }
 
@@ -134,7 +156,7 @@ class _ListUsersState extends State<Berandaadmin> {
           ),
           color: Colors.red,
           onPressed: () {
-            deleteUsers(id);
+            deleteProduk(id);
             Navigator.of(context, rootNavigator: true).pop();
             initState();
           },

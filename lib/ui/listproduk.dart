@@ -1,270 +1,121 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-//import  terlebih  dahulu  halaman  yang  diperlukan
 import './detail_produk.dart';
+import 'package:crud_api/modal/api.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
 
-//Top  Level/Root
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
+class ListProduk extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'First  App',
-      home: MyHomePage(),
-    );
-  }
+  _ListProdukState createState() => _ListProdukState();
 }
 
-class MyHomePage extends StatelessWidget {
+class _ListProdukState extends State<ListProduk> {
+  List produkList;
+  int count = 0;
+  Future<List> getData() async {
+    final response = await http.get(BaseUrl.tampilProduk);
+    return json.decode(response.body);
+  }
+
+  @override
+  void initState() {
+    Future<List> produkListFuture = getData();
+    produkListFuture.then((produkList) {
+      setState(() {
+        this.produkList = produkList;
+        this.count = produkList.length;
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("List Produk")),
-        body: ListView(
-          shrinkWrap: true,
-          padding: const EdgeInsets.fromLTRB(2.0, 10.0, 2.0, 10.0),
-          children: <Widget>[
-            new GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (BuildContext context) => DetailProduk(
-                    name: "ACER",
-                    description: "Ini  laptop  ACer  Cangih",
-                    price: 3500000,
-                    image: "acer.jpg",
-                    star: 1,
-                  ),
-                ));
-              },
-              child: ProductBox(
-                name: "ACER",
-                description: "Ini  laptop  ACer  Cangih",
-                price: 3500000,
-                image: "acer.jpg",
-              ),
-            ),
-            new GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (BuildContext context) => DetailProduk(
-                    name: "SPEAKER",
-                    description:
-                        "Speaker nomor 1 dengan kualitas terbaik dan harga terjangkau",
-                    price: 400000,
-                    image: "speaker.jpg",
-                    star: 1,
-                  ),
-                ));
-              },
-              child: ProductBox(
-                name: "SPEAKER",
-                description:
-                    "Speaker nomor 1 dengan kualitas terbaik dan harga terjangkau",
-                price: 400000,
-                image: "speaker.jpg",
-              ),
-            ),
-            new GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(new MaterialPageRoute(
-                    builder: (BuildContext context) => DetailProduk(
-                      name: "Adventorss",
-                      description:
-                          "Pixel  is  the  most  featureful  phone  ever",
-                      price: 6000000,
-                      image: "hp.jpg",
-                      star: 4,
-                    ),
-                  ));
-                },
-                child: ProductBox(
-                  name: "Adventorss",
-                  description: "Pixel  is  the  most  featureful  phone  ever",
-                  price: 6000000,
-                  image: "hp.jpg",
-                )),
-            new GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (BuildContext context) => DetailProduk(
-                    name: "SETRIKA LISTRIK MASPION",
-                    description:
-                        "Dengan Maspion pakaian akan tetap kencang dan kantong jadi irit",
-                    price: 100000,
-                    image: "maspion.png",
-                    star: 3,
-                  ),
-                ));
-              },
-              child: ProductBox(
-                name: "SETRIKA LISTRIK MASPION",
-                description:
-                    "Dengan Maspion pakaian akan tetap kencang dan kantong jadi irit",
-                price: 100000,
-                image: "maspion.png",
-              ),
-            ),
-            new GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (BuildContext context) => DetailProduk(
-                    name: "ASUS",
-                    description:
-                        "Laptop  is  most  productive  development  tool",
-                    price: 3600000,
-                    image: "asus.jpg",
-                    star: 3,
-                  ),
-                ));
-              },
-              child: ProductBox(
-                name: "ASUS",
-                description: "Laptop  is  most  productive  development  tool",
-                price: 3600000,
-                image: "asus.jpg",
-              ),
-            ),
-            new GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (BuildContext context) => DetailProduk(
-                    name: "SAMSUNG GALAXY S20",
-                    description:
-                        "Smatphone canggih yang pastinya memiliki kualitas tinggi",
-                    price: 4000000,
-                    image: "galaxys20.jpg",
-                    star: 3,
-                  ),
-                ));
-              },
-              child: ProductBox(
-                name: "SAMSUNG GALAXY S20",
-                description:
-                    "Smatphone canggih yang pastinya memiliki kualitas tinggi",
-                price: 4000000,
-                image: "galaxys20.jpg",
-              ),
-            ),
-            new GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (BuildContext context) => DetailProduk(
-                    name: "MAcbook",
-                    description:
-                        "Laptop  is  most  productive  development  tool",
-                    price: 8000000,
-                    image: "mac.jpg",
-                    star: 3,
-                  ),
-                ));
-              },
-              child: ProductBox(
-                name: "MAcbook",
-                description:
-                    "Laptop  is  the  most  useful  device  ever  for  meeting",
-                price: 8000000,
-                image: "mac.jpg",
-              ),
-            ),
-            new GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (BuildContext context) => DetailProduk(
-                    name: "SamSUng",
-                    description:
-                        "Laptop  is  most  productive  development  tool",
-                    price: 6000000,
-                    image: "samsung.jpg",
-                    star: 5,
-                  ),
-                ));
-              },
-              child: ProductBox(
-                name: "SamSUng",
-                description: "Pendrive  is  useful  storage  medium",
-                price: 6000000,
-                image: "samsung.jpg",
-              ),
-            ),
-          ],
-        ));
+      appBar: new AppBar(
+        title: Text("List Produk"),
+      ),
+      body: createListView(),
+      /* floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          tooltip: 'Input Barang',
+          onPressed: () => Navigator.of(context).push(new MaterialPageRoute(
+              builder: (BuildContext context) => new TambahProduk(
+                    list: null,
+                    index: null,
+                  )))),*/
+    );
   }
-}
 
-//menggunakan  widget  StatelessWidget
-class ProductBox extends StatelessWidget {
-//deklarasi  variabel  yang  diterima  dari  MyHomePage
-  ProductBox({Key key, this.name, this.description, this.price, this.image})
-      : super(key: key);
-//menampung  variabel  yang  diterima  untuk  dapat  digunakan  pada  class  ini
-  final String name;
-  final String description;
-  final int price;
-  final String image;
-
-  Widget build(BuildContext context) {
-//menggunakan  widget  container
-    return Container(
-//padding
-        padding: EdgeInsets.all(2),
-        //  height:  120,
-        //menggunakan  widget  card
-        child: Card(
-            //membuat  tampilan  secara  horisontal  antar  image  dan  deskripsi
-            child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                //children  digunakan  untuk  menampung  banyak  widget
-                children: <Widget>[
-              Image.asset(
-                "assets/appimages/" + image,
-                width: 150,
-              ),
-              Expanded(
-                  //child  digunakan  untuk  menampung  satu  widget
-                  child: Container(
+  ListView createListView() {
+    TextStyle textStyle = Theme.of(context).textTheme.subhead;
+    return ListView.builder(
+      itemCount: count,
+      itemBuilder: (BuildContext context, int index) {
+        return Card(
+            color: Colors.white,
+            margin: EdgeInsets.all(2),
+            child: ListTile(
+              onTap: () {
+                Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (BuildContext context) => DetailProduk(
+                    name: produkList[index]['nama_produk'],
+                    description: produkList[index]['deskripsi'],
+                    price: produkList[index]['harga'],
+                    image: produkList[index]['image'],
+                    star: 4,
+                  ),
+                ));
+              },
+              subtitle: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Image.asset(
+                      "assets/appimages/" + produkList[index]['image'],
+                      width: 150,
+                    ),
+                    Expanded(
+                        child: Container(
                       padding: EdgeInsets.all(5),
-                      //membuat  tampilan  secara  vertikal
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        //ini  isi  tampilan  vertikal  tersebut
                         children: <Widget>[
-                          //menampilkan  variabel  menggunakan  widget  text
-                          Text(this.name,
+                          Text(this.produkList[index]['nama_produk'],
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               )),
-                          Text(this.description),
-                          Text(
-                            "Price:  " + this.price.toString(),
-                            style: TextStyle(color: Colors.red),
-                          ),
-                          //menampilkan  widget  icon    dibungkus  dengan  row
+                          Text(this.produkList[index]['deskripsi']),
                           Row(
                             children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.star,
-                                    size: 10,
-                                    color: Colors.deepOrange,
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    size: 10,
-                                    color: Colors.deepOrange,
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    size: 10,
-                                    color: Colors.deepOrange,
-                                  ),
-                                  Icon(Icons.star,
-                                      size: 10, color: Colors.orange),
-                                ],
-                              )
+                              Icon(
+                                Icons.star,
+                                size: 10,
+                                color: Colors.deepOrange,
+                              ),
+                              Icon(
+                                Icons.star,
+                                size: 10,
+                                color: Colors.deepOrange,
+                              ),
+                              Icon(
+                                Icons.star,
+                                size: 10,
+                                color: Colors.deepOrange,
+                              ),
+                              Icon(Icons.star, size: 10, color: Colors.orange),
+                              Text(
+                                " | Rp. " + produkList[index]['harga'],
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                             ],
                           )
                         ],
-                      )))
-            ])));
+                      ),
+                    ))
+                  ]),
+            ));
+      },
+    );
   }
 }

@@ -20,7 +20,7 @@ class _ListPenjualanState extends State<ListPenjualan> {
     //request data penjualan
     //sesuaikan dengan ip address, pastikan webserver aktif, dan fungsi sesuai dengan studi kasus
     final response =
-        await http.get('http://192.168.43.28/apiflutter/Penjualan/');
+        await http.get('http://192.168.43.27/apiflutter/Penjualan/');
     //convert kedalam json
     return json.decode(response.body);
   }
@@ -107,7 +107,7 @@ class _ListPenjualanState extends State<ListPenjualan> {
 
   Future<http.Response> deletePenjualan(id) async {
     final http.Response response = await http
-        .delete('http://192.168.43.28/apiflutter/penjualan/delete/$id');
+        .delete('http://192.168.43.27/apiflutter/penjualan/delete/$id');
     return response;
   }
 

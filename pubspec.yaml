@@ -21,11 +21,17 @@ dependencies:
     sdk: flutter
     
   shared_preferences: ^0.5.3+4  
-
+ 
   http: ^0.12.0+2
   #untuk datepicker form input
   intl: ^0.15.7
   datetime_picker_formfield: ^1.0.0
+  #image_picker: ^0.4.12+1
+  #path_provider: "^0.4.1"
+ # image: "^2.0.4"
+  # firebase_auth: ^0.6.6
+  # google_sign_in: ^3.2.4
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -64,6 +70,9 @@ flutter:
   - assets/appimages/maspion.png
   - assets/appimages/bglogin.jpg
   - assets/appimages/login.png
+  - assets/appimages/bunga.jpg
+  - assets/appimages/cintia.jpg
+  - assets/appimages/rara.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

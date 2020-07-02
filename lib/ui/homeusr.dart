@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import './detail_akun.dart';
+//import './detail_akun.dart';
 import './Login.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -86,67 +86,7 @@ class _HomeUserState extends State<MyHomePage> {
               border: Border(
                   bottom: BorderSide(color: Theme.of(context).dividerColor)),
             ),
-            //untuk membuat tampilan secara horizontal maka gunkan row
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                //untuk membuat tampilan secara vertikal maka digunakan column
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(Icons.info, color: Colors.blue),
-                    Container(
-                      margin: const EdgeInsets.only(top: 8),
-                      child: Text(
-                        "TENTANG",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(Icons.computer, color: Colors.blue),
-                    Container(
-                      margin: const EdgeInsets.only(top: 8),
-                      child: Text(
-                        "KOMPUTER",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(Icons.share, color: Colors.blue),
-                    Container(
-                      margin: const EdgeInsets.only(top: 8),
-                      child: Text(
-                        "BAGIKAN",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+            //untuk membuat tampilan secara horizontal maka gunkan ro
           ),
         ],
       ),

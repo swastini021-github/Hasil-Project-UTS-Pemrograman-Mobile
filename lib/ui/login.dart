@@ -20,7 +20,7 @@ class _LoginState extends State<Login> {
   String msg = "";
   Future<List> _login() async {
     final response = await http
-        .post("http://192.168.43.28/apiflutter/Login/login_api", body: {
+        .post("http://192.168.43.27/apiflutter/Login/login_api", body: {
       "username": usr.text,
       "password": psw.text,
     });
@@ -100,6 +100,16 @@ class _LoginState extends State<Login> {
               _login();
             },
           ),
+          InkWell(
+            onTap: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => Register()));
+            },
+            child: Text(
+              'Create New Account',
+              textAlign: TextAlign.center,
+            ),
+          ),
           Text(
             msg,
             style: TextStyle(fontSize: 20.0, color: Colors.red),
@@ -107,5 +117,148 @@ class _LoginState extends State<Login> {
         ]),
       ),
     );
+  }
+}
+
+class Register extends StatefulWidget {
+  @override
+  _RegisterState createState() => _RegisterState();
+}
+
+class _RegisterState extends State<Register> {
+  String email, password, username, nama;
+  String pesan = "";
+  final _key = new GlobalKey<FormState>();
+
+  bool _secureText = true;
+  showHide() {
+    setState(() {
+      _secureText = !_secureText;
+    });
+  }
+
+  check() {
+    final form = _key.currentState;
+    if (form.validate()) {
+      form.save();
+      save();
+    }
+  }
+
+  save() async {
+    final response = await http
+        .post("http://192.168.43.27/apiflutter/Login/register", body: {
+      "username": username,
+      "password": password,
+      "email": email,
+      "nama": nama
+    });
+    var data = jsonDecode(response.body);
+    //int value = data['value'];
+    // ignore: unrelated_type_equality_checks
+    if (data["error"] == true) {
+      setState(() {
+        pesan = data["message"];
+      });
+    } else {
+      setState(() {
+        Navigator.pop(context);
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(),
+        body: Form(
+          key: _key,
+          child: ListView(
+            padding: EdgeInsets.all(16.0),
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                    validator: (e) {
+                      if (e.isEmpty) {
+                        return "Masukan Nama Lengkap";
+                      }
+                    },
+                    onSaved: (e) => nama = e,
+                    decoration: InputDecoration(
+                      labelText: "Nama Lengkap",
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(3.0)),
+                    )),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  // ignore: missing_return
+                  validator: (e) {
+                    if (e.isEmpty) {
+                      return "Masukan Email";
+                    }
+                  },
+                  onSaved: (e) => email = e,
+                  decoration: InputDecoration(
+                    labelText: "Email",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(3.0)),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  // ignore: missing_return
+                  validator: (e) {
+                    if (e.isEmpty) {
+                      return "Masukan Username";
+                    }
+                  },
+                  onSaved: (e) => username = e,
+                  decoration: InputDecoration(
+                    labelText: "Username",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(3.0)),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  obscureText: _secureText,
+                  onSaved: (e) => password = e,
+                  decoration: InputDecoration(
+                    labelText: "Password",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(3.0)),
+                    suffixIcon: IconButton(
+                        icon: Icon(_secureText
+                            ? Icons.visibility_off
+                            : Icons.visibility),
+                        onPressed: showHide),
+                  ),
+                ),
+              ),
+              MaterialButton(
+                color: Theme.of(context).primaryColorDark,
+                textColor: Theme.of(context).primaryColorLight,
+                onPressed: () {
+                  check();
+                },
+                child: Text(
+                  "Register",
+                  textScaleFactor: 1.5,
+                ),
+              ),
+              Text(
+                pesan,
+                style: TextStyle(fontSize: 20.0, color: Colors.red),
+              )
+            ],
+          ),
+        ));
   }
 }

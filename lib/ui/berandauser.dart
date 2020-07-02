@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import './berandaadmin.dart';
+import './berandaadmin.dart' as berandaadmin;
 import './detail_akun.dart';
 import './homeusr.dart' as homeusr;
 import './listproduk.dart' as listproduk;
 import './listpenjualan.dart' as listpenjualan;
-import './detail_produk.dart';
+import './inputpenjualan.dart' as inputpenjualan;
+import './product.dart' as produk;
 import './login.dart';
 
 class Berandauser extends StatefulWidget {
@@ -16,10 +17,7 @@ class Berandauser extends StatefulWidget {
 class _BerandauserState extends State<Berandauser>
     with SingleTickerProviderStateMixin {
   TabController controller;
-//jangan  lupa  tambahkan  initState  untuk  inisialisasi  dan  mengaktifkan  tab
   @override
-
-//jangan  lupa  tambahkan  dispose  untuk  berpindah  halaman
   @override
   void dispose() {
     controller.dispose();
@@ -59,16 +57,11 @@ class _BerandauserState extends State<Berandauser>
   Widget build(BuildContext context) {
     switch (level) {
       case 1:
-        return Berandaadmin();
-        break;
-      case 2:
         return Scaffold(
             //widget Drawer
             drawer: new Drawer(
-              //menggunakan listView agar drawer dapat melebihi width devices
               child: new ListView(
                 children: <Widget>[
-                  //Drawer Header diisi dengan informasi akun
                   new GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(new MaterialPageRoute(
@@ -86,7 +79,7 @@ class _BerandauserState extends State<Berandauser>
                         onTap: () {},
                         child: new CircleAvatar(
                           backgroundImage:
-                              AssetImage('assets/appimages/rara.jpg'),
+                              AssetImage('assets/appimages/' + photo),
                         ),
                       ),
                       //memberi background pada Drawer Header
@@ -109,40 +102,93 @@ class _BerandauserState extends State<Berandauser>
                     title: new Text('Notifications'),
                     trailing: new Icon(Icons.notifications_none),
                   ),
-
-                  //Divider Menu
-                  /* Divider(
-              height: 2,
-            ),
-
-            new ListTile(
-              title: new Text('Setting'),
-              trailing: new Icon(Icons.settings),
-            ),*/
                 ],
               ),
             ),
             body: new TabBarView(
-//terdapat  controller  untuk  mengatur  halaman
               controller: controller,
               children: <Widget>[
-//pemanggilan  halaman  dimulai  dari  alias.className  halaman  yang  diload
-                new homeusr.MyHomePage(),
-                new listproduk.MyHomePage(),
+                new berandaadmin.Berandaadmin(),
+                new produk.DaftarProduk(),
                 new listpenjualan.ListPenjualan(),
               ],
             ),
-//membuat  bottom  tab
             bottomNavigationBar: new Material(
               color: Colors.blue,
               child: new TabBar(
                 controller: controller,
                 tabs: <Widget>[
-//menggunakan  icon  untuk  mempercantik  nama  tab
-//icon  berurutan  sesuai  pemanggilan  halaman
                   new Tab(icon: new Icon(Icons.home)),
                   new Tab(icon: new Icon(Icons.view_list)),
                   new Tab(icon: new Icon(Icons.shopping_cart))
+                ],
+              ),
+            ));
+        break;
+      case 2:
+        return Scaffold(
+            //widget Drawer
+            drawer: new Drawer(
+              child: new ListView(
+                children: <Widget>[
+                  new GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(new MaterialPageRoute(
+                        builder: (BuildContext context) => DetailAkun(
+                          accountName: nama,
+                          accountEmail: email,
+                          backgroundImage: photo,
+                        ),
+                      ));
+                    },
+                    child: UserAccountsDrawerHeader(
+                      accountName: new Text(nama),
+                      accountEmail: new Text(email),
+                      currentAccountPicture: new GestureDetector(
+                        onTap: () {},
+                        child: new CircleAvatar(
+                          backgroundImage:
+                              AssetImage('assets/appimages/' + photo),
+                        ),
+                      ),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/appimages/bg.jpg'),
+                            fit: BoxFit.cover),
+                      ),
+                    ),
+                  ),
+                  //Menu Drawer
+                  new ListTile(
+                    title: new Text('logout'),
+                    trailing: new Icon(Icons.settings),
+                    onTap: () {
+                      signOut();
+                    },
+                  ),
+                  new ListTile(
+                    title: new Text('Notifications'),
+                    trailing: new Icon(Icons.notifications_none),
+                  ),
+                ],
+              ),
+            ),
+            body: new TabBarView(
+              controller: controller,
+              children: <Widget>[
+                new homeusr.MyHomePage(),
+                new listproduk.ListProduk(),
+                new inputpenjualan.InputPenjualan(),
+              ],
+            ),
+            bottomNavigationBar: new Material(
+              color: Colors.blue,
+              child: new TabBar(
+                controller: controller,
+                tabs: <Widget>[
+                  new Tab(icon: new Icon(Icons.home)),
+                  new Tab(icon: new Icon(Icons.view_list)),
+                  new Tab(icon: new Icon(Icons.input))
                 ],
               ),
             ));
