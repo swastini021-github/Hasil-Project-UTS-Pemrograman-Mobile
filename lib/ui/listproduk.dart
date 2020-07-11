@@ -64,6 +64,7 @@ class _ListProdukState extends State<ListProduk> {
                     description: produkList[index]['deskripsi'],
                     price: produkList[index]['harga'],
                     image: produkList[index]['image'],
+                    stok: produkList[index]['quantity'],
                     star: 4,
                   ),
                 ));
@@ -109,7 +110,13 @@ class _ListProdukState extends State<ListProduk> {
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ],
-                          )
+                          ),
+                          Row(children: <Widget>[
+                            new Text(
+                              " Stok " + produkList[index]['quantity'],
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ]),
                         ],
                       ),
                     ))

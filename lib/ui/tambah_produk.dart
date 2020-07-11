@@ -1,4 +1,5 @@
-import 'package:crud_api/ui/product.dart';
+import 'package:crud_api/ui/berandaadmin.dart';
+import 'package:crud_api/ui/berandauser.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -42,13 +43,6 @@ class MyCustomFormState extends State<MyCustomForm> {
   TextEditingController deskripsiController = TextEditingController();
   TextEditingController hargaController = TextEditingController();
   TextEditingController photoController = TextEditingController();
-  String idUsers;
-  getPref() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      idUsers = preferences.getString("id");
-    });
-  }
 
   Future<http.Response> adddata(index) async {
     if (index == null) {
@@ -59,20 +53,18 @@ class MyCustomFormState extends State<MyCustomForm> {
         'deskripsi': deskripsiController.text,
         'harga': hargaController.text,
         'photo': photoController.text,
-        'idUsers': idUsers,
       });
       return response;
     } else {
       final http.Response response = await http.post(
           "http://192.168.43.27/apiflutter/admin/save_update_produk",
           body: {
-            'id': widget.list['id_produk'],
+            'id_produk': widget.list['id_produk'],
             'nama_produk': namaController.text,
             'quantity': quantityController.text,
             'deskripsi': deskripsiController.text,
             'harga': hargaController.text,
             'photo': photoController.text,
-            'idUsers': idUsers,
           });
       return response;
     }
@@ -91,8 +83,8 @@ class MyCustomFormState extends State<MyCustomForm> {
       quantityController = TextEditingController(text: widget.list['quantity']);
       deskripsiController =
           TextEditingController(text: widget.list['deskripsi']);
-      photoController = TextEditingController(text: widget.list['harga']);
-      hargaController = TextEditingController(text: widget.list['image']);
+      photoController = TextEditingController(text: widget.list['image']);
+      hargaController = TextEditingController(text: widget.list['harga']);
     }
     super.initState();
   }
@@ -205,7 +197,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => new DaftarProduk()));
+                                builder: (context) => new Berandauser()));
                       }
                     },
                   ),
@@ -225,7 +217,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => new DaftarProduk()));
+                              builder: (context) => new Berandauser()));
                     },
                   ),
                 )

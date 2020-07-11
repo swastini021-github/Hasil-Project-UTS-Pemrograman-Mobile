@@ -24,7 +24,7 @@ class _BerandauserState extends State<Berandauser>
     super.dispose();
   }
 
-  String id, nama, email, photo;
+  String id, nama, email, photo, status;
   int level = 0;
   getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -34,6 +34,7 @@ class _BerandauserState extends State<Berandauser>
       nama = preferences.getString("nama");
       email = preferences.getString("email");
       photo = preferences.getString("photo");
+      status = preferences.getString("status");
     });
   }
 

@@ -50,7 +50,8 @@ class Login extends CI_Controller
         } else if (isset($result_email)) {
             $response['value'] = '0';
             $response['message'] = 'email sudah digunakan';
-        } else {
+        }
+        else {
             $data = array(
                 'email' => $_POST['email'],
                 'username' => $_POST['username'],
@@ -59,7 +60,7 @@ class Login extends CI_Controller
                 'nama' => $_POST['nama'],
                 'status' => '1',
                 'createdDate' => date('Y-m-d h:m:s'),
-                'photo' => 'swastini.jpg'
+                'photo' => 'bunga.jpg'
             );
             $this->db->insert('users', $data);
             $response['error'] = FALSE;

@@ -52,7 +52,6 @@ class Admin extends CI_Controller
             'nama_produk' => $_POST['nama_produk'],
             'quantity' => $_POST['quantity'],
             'deskripsi' => $_POST['deskripsi'],
-            'idUsers' => $_POST['idUsers'],
             'harga' => $_POST['harga'],
             'createdDate' => date('Y-m-d h:m:s'),
             'image' => $_POST['photo']
@@ -63,15 +62,14 @@ class Admin extends CI_Controller
     function save_update_produk()
     {
         $data = array(
-            'nama_produk' => $_POST['nama'],
+            'nama_produk' => $_POST['nama_produk'],
             'quantity' => $_POST['quantity'],
             'deskripsi' => $_POST['deskripsi'],
-            'idUsers' => $_POST['idUsers'],
             'harga' => $_POST['harga'],
             'createdDate' => date('Y-m-d h:m:s'),
             'image' => $_POST['photo']
         );
-        $this->db->where('id_produk', $_POST['id'])->update('produk', $data);
+        $this->db->where('id_produk', $_POST['id_produk'])->update('produk', $data);
         $result['message'] = "Pesanan Telah Terkirim";
         echo json_encode($result);
     }

@@ -1,11 +1,9 @@
+import 'package:crud_api/modal/api.dart';
 import 'package:flutter/material.dart';
-//untuk datepicker
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-//untuk http package
 import 'package:http/http.dart' as http;
 import './listpenjualan.dart';
-//import 'package:crud_api/main.dart';
 import 'dart:async';
 
 class InputPenjualan extends StatelessWidget {
@@ -45,19 +43,17 @@ class MyCustomForm extends StatefulWidget {
 }
 
 class MyCustomFormState extends State<MyCustomForm> {
-  //membuat variabel untuk menampung validasi
   final _formKey = GlobalKey<FormState>();
-  //membaca inputan dari textfield
   TextEditingController nameController = TextEditingController();
   TextEditingController jumlahController = TextEditingController();
   TextEditingController tanggalController = TextEditingController();
   TextEditingController keteranganController = TextEditingController();
-  //format datepicker
+
   final format = DateFormat('yyyy-MM-dd');
   Future<http.Response> adddata(index) async {
     if (index == null) {
-      final http.Response response = await http
-          .post("http://192.168.43.27/apiflutter/penjualan/save", body: {
+      final http.Response response =
+          await http.post(BaseUrl.inputPenjualan, body: {
         'nama': nameController.text,
         'keterangan': keteranganController.text,
         'jumlah': jumlahController.text,
@@ -65,8 +61,8 @@ class MyCustomFormState extends State<MyCustomForm> {
       });
       return response;
     } else {
-      final http.Response response = await http
-          .post("http://192.168.43.27/apiflutter/penjualan/save_update", body: {
+      final http.Response response =
+          await http.post(BaseUrl.inputPenjualan, body: {
         'id': widget.list['id'],
         'nama': nameController.text,
         'keterangan': keteranganController.text,
@@ -97,7 +93,6 @@ class MyCustomFormState extends State<MyCustomForm> {
 
   @override
   Widget build(BuildContext context) {
-    //membuat form sesuai _formkey
     return Form(
       key: _formKey,
       child: ListView(
@@ -143,7 +138,6 @@ class MyCustomFormState extends State<MyCustomForm> {
             padding: EdgeInsets.all(10.0),
             child: TextFormField(
               controller: keteranganController,
-              //textfield type number
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 hintText: "keterangan",

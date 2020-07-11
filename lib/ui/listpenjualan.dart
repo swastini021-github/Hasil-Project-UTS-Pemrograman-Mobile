@@ -94,12 +94,11 @@ class _ListPenjualanState extends State<ListPenjualan> {
                     penjualanList[index]['id'], penjualanList[index]['nama']),
               ),
               //klik list untuk tampilkan form update
-              onTap: () =>
-                  Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                      builder: (BuildContext context) => new InputPenjualan(
-                            list: penjualanList[index],
-                            index: index,
-                          )))),
+              onTap: () => Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (BuildContext context) => new InputPenjualan(
+                        list: penjualanList[index],
+                        index: index,
+                      )))),
         );
       },
     );

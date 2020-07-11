@@ -1,27 +1,22 @@
 import 'package:crud_api/ui/berandaadmin.dart';
+import 'package:crud_api/ui/berandauser.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:http/http.dart' as http;
-import './listpenjualan.dart';
 import 'dart:async';
 
 class InputUsers extends StatelessWidget {
   final list;
   final index;
-  //class constructor
   InputUsers({this.list, this.index});
   @override
   Widget build(BuildContext context) {
-    //membuat material app
     return MaterialApp(
-      //menampilkan judul transaksi baru jika index null
       title: index == null ? "User Baru" : "Update User",
       home: Scaffold(
         appBar: AppBar(
           title: index == null ? Text("User Baru") : Text("Update User"),
         ),
-        //membuat body dalamsebuah class dengan parameter list dan index
         body: MyCustomForm(
           list: list,
           index: index,
@@ -43,21 +38,21 @@ class MyCustomForm extends StatefulWidget {
 
 class MyCustomFormState extends State<MyCustomForm> {
   final _formKey = GlobalKey<FormState>();
-  //membaca inputan dari textfield
   TextEditingController nameController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController photoController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+
   Future<http.Response> adddata(index) async {
     if (index == null) {
       final http.Response response = await http
           .post("http://192.168.43.27/apiflutter/admin/save_users", body: {
         'nama': nameController.text,
-        'emali': emailController.text,
+        'email': emailController.text,
         'username': usernameController.text,
         'password': passwordController.text,
-        'password': photoController.text,
+        'photo': photoController.text,
       });
       return response;
     } else {
@@ -69,7 +64,7 @@ class MyCustomFormState extends State<MyCustomForm> {
             'email': emailController.text,
             'username': usernameController.text,
             'password': passwordController.text,
-            'password': photoController.text,
+            'photo': photoController.text,
           });
       return response;
     }
@@ -134,6 +129,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                   return null;
                 },
                 controller: emailController,
+                keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   labelText: "Email",
                   border: OutlineInputBorder(
@@ -181,7 +177,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                   }
                   return null;
                 },
-                controller: usernameController,
+                controller: photoController,
                 decoration: InputDecoration(
                   labelText: "Nama File(Photo)",
                   border: OutlineInputBorder(
@@ -206,7 +202,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => new Berandaadmin()));
+                                builder: (context) => new Berandauser()));
                       }
                     },
                   ),

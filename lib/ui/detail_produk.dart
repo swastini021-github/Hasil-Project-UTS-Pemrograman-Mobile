@@ -2,12 +2,19 @@ import 'package:flutter/material.dart';
 
 class DetailProduk extends StatefulWidget {
   DetailProduk(
-      {Key key, this.name, this.description, this.price, this.image, this.star})
+      {Key key,
+      this.name,
+      this.description,
+      this.price,
+      this.image,
+      this.stok,
+      this.star})
       : super(key: key);
   String name;
   final String description;
   final String price;
   final String image;
+  final String stok;
   final int star;
   @override
   _DetailProdukState createState() => _DetailProdukState();
@@ -54,15 +61,24 @@ class _DetailProdukState extends State<DetailProduk> {
                     children: childrenstar,
                   ),
                   new Container(
-                    child: new Text(
-                      this.widget.price.toString(),
+                      child: Row(children: <Widget>[
+                    Text(
+                      'Stok ' + this.widget.stok.toString(),
                       style: new TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                           fontFamily: "NeoSansBold"),
                     ),
-                  )
+                    Text(
+                      ' || Rp.' + this.widget.price.toString(),
+                      style: new TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontFamily: "NeoSansBold"),
+                    ),
+                  ]))
                 ],
               ),
             ),

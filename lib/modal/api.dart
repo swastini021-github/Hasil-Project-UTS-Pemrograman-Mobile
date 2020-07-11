@@ -13,4 +13,9 @@ class BaseUrl {
   static String editProduk =
       "http://192.168.43.27/apiflutter/Admin/update_produk";
   static String listPenjualan = "http://192.168.43.27/apiflutter/Penjualan/";
+  static String inputPenjualan =
+      " http://192.168.43.27/apiflutter/penjualan/save";
+
+  static String updatePenjualan =
+      "  http://192.168.43.27/apiflutter/penjualan/save_update";
 }
